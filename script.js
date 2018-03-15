@@ -1,5 +1,13 @@
 // Some of these code ideas were borrowed from Udacity Maps API classes
 var map;
+
+// Model: this is the data used for the markers
+    var locations = [
+    {title: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
+    {title: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
+    {title: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
+    {title: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
+    ];
 // Create a new blank array for all the listing markers.
 var markers = [];
 
@@ -117,14 +125,6 @@ function initMap() {
         }
         ]
     });
-
-    // Map locations used for markers and for the array/list
-    var locations = [
-    {title: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
-    {title: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
-    {title: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
-    {title: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
-    ];
 
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
