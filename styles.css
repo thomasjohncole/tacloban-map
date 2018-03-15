@@ -4,7 +4,17 @@ html, body {
     margin: 0;
     padding: 0;
       }
-
 #map {
     height: 100%;
 }
+#list {
+    float:left;
+    position: fixed;
+    z-index: 99 !important;
+    background-color: white;
+    padding-right: 25px;
+}
+ul {
+    list-style-type: none;
+}
+
