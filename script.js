@@ -1,7 +1,7 @@
 // Some of these code ideas were borrowed from Udacity Maps API classes
 var map;
 
-// Model: this is the data used for the markers
+// Model: this is the data used to create the array of markers and list items
     var locations = [
     {title: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
     {title: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
@@ -12,9 +12,9 @@ var map;
 var markers = [];
 
 function initMap() {
-    // Constructor creates a new map - only center and zoom are required.
+    // create an object which contains the map options center, zoom, and styles
     // Map style is 'klapsons purple' by Vanlop Ninkhuha from snazzymaps.com
-    map = new google.maps.Map(document.getElementById('map'), {
+    var mapOptions = {
         center: {lat: 11.223399, lng: 125.001354},
         zoom: 15,
         styles: [
@@ -124,7 +124,10 @@ function initMap() {
             ]
         }
         ]
-    });
+    };
+
+    // Constructor creates a new map and takes mapOptions as an argument
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
