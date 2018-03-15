@@ -1,11 +1,11 @@
+// Some of these code ideas were borrowed from Udacity Maps API classes
 var map;
-
 // Create a new blank array for all the listing markers.
 var markers = [];
 
 function initMap() {
-// Constructor creates a new map - only center and zoom are required.
-// styles are taken from the page www. something - fix this attribution!
+    // Constructor creates a new map - only center and zoom are required.
+    // Map style is 'klapsons purple' by Vanlop Ninkhuha from snazzymaps.com
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 11.223399, lng: 125.001354},
         zoom: 15,
@@ -118,8 +118,7 @@ function initMap() {
         ]
     });
 
-    // These are the real estate listings that will be shown to the user.
-    // Normally we'd have these in a database instead.
+    // Map locations used for markers and for the array/list
     var locations = [
     {title: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
     {title: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
@@ -130,12 +129,17 @@ function initMap() {
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
+    // Recenter map on window resize to fit markers
+    window.onresize = function () {
+        map.fitBounds(bounds);
+    };
+
     //  use the locations array to create an array of markers on initialize.
     for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
         var position = locations[i].location;
         var title = locations[i].title;
-        // Create a marker per location, and put into markers array.
+        // Create a marker for each location, and put into markers array.
         var marker = new google.maps.Marker({
             map: map,
             position: position,
@@ -154,20 +158,19 @@ function initMap() {
     // Extend the boundaries of the map for each marker
     map.fitBounds(bounds);
 
-}
-
-// This function populates the infowindow when the marker is clicked. We'll only allow
-      // one infowindow which will open at the marker that is clicked, and populate based
-      // on that markers position.
-      function populateInfoWindow(marker, infowindow) {
+    // This function populates the infowindow when the marker is clicked. We'll only allow
+    // one infowindow which will open at the marker that is clicked, and populate based
+    // on that markers position.
+    function populateInfoWindow(marker, infowindow) {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
-          infowindow.marker = marker;
-          infowindow.setContent('<div>' + marker.title + '</div>');
-          infowindow.open(map, marker);
-          // Make sure the marker property is cleared if the infowindow is closed.
-          infowindow.addListener('closeclick',function(){
+            infowindow.marker = marker;
+            infowindow.setContent('<div>' + marker.title + '</div>');
+            infowindow.open(map, marker);
+            // Make sure the marker property is cleared if the infowindow is closed.
+            infowindow.addListener('closeclick',function(){
             infowindow.setMarker = null;
-          });
+            });
         }
     }
+}
