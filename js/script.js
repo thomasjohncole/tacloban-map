@@ -1,4 +1,5 @@
 // Some of these code ideas were borrowed from Udacity Maps API classes
+// Create global map variable
 var map;
 
 // Model: this is the data used to create the array of markers and list items
