@@ -16,7 +16,7 @@ var Location = function (data) {
     this.location = ko.observable(data.location);
 };
 
-var ViewModel = function () {
+var viewModel = function () {
     var self = this;
     // 'this refers to the ViewModel binding context'
 
@@ -28,12 +28,13 @@ var ViewModel = function () {
     });
 
     this.itemClicked = function (clickedListItem) {
-        alert("item clicked!");
+        alert("The index/position of " + ko.toJSON(clickedListItem) +
+            " is: " + self.locationList.indexOf(clickedListItem) );
     }
 
 }
 
-ko.applyBindings(new ViewModel());
+ko.applyBindings(new viewModel());
 
 
 // Create a new blank array for all the listing markers.
