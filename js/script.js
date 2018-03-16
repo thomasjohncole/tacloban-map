@@ -13,6 +13,7 @@ var locations = [
 // create a location object with knockout observables
 var Location = function (data) {
     this.name = ko.observable(data.name);
+    this.location = ko.observable(data.location);
 };
 
 var ViewModel = function () {
@@ -22,13 +23,17 @@ var ViewModel = function () {
     this.locationList = ko.observableArray([]);
 
     // push locations array values into locationList array
-    locations.forEach(function(listItem){
+    locations.forEach(function (listItem) {
         self.locationList.push( new Location(listItem) );
     });
+
+    this.itemClicked = function (clickedListItem) {
+        alert("item clicked!");
+    }
+
 }
 
 ko.applyBindings(new ViewModel());
-
 
 
 // Create a new blank array for all the listing markers.
@@ -164,12 +169,12 @@ function initMap() {
     for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
         var position = locations[i].location;
-        var title = locations[i].title;
+        var name = locations[i].name;
         // Create a marker for each location, and put into markers array.
         var marker = new google.maps.Marker({
             map: map,
             position: position,
-            title: title,
+            title: name,
             animation: google.maps.Animation.DROP,
             id: i
         });
