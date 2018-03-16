@@ -3,12 +3,34 @@
 var map;
 
 // Model: this is the data used to create the array of markers and list items
-    var locations = [
-    {title: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
-    {title: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
-    {title: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
-    {title: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
-    ];
+var locations = [
+    {name: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
+    {name: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
+    {name: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
+    {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
+];
+
+// create a location object with knockout observables
+var Location = function (data) {
+    this.name = ko.observable(data.name);
+};
+
+var ViewModel = function () {
+    var self = this;
+    // 'this refers to the ViewModel binding context'
+
+    this.locationList = ko.observableArray([]);
+
+    // push locations array values into locationList array
+    locations.forEach(function(listItem){
+        self.locationList.push( new Location(listItem) );
+    });
+}
+
+ko.applyBindings(new ViewModel());
+
+
+
 // Create a new blank array for all the listing markers.
 var markers = [];
 

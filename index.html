@@ -7,19 +7,15 @@
   <body>
 
     <div id="list">
-        <ul>
-            <li>Jose Karlos Cafe</li>
-            <li>Skye coffee+wine</li>
-            <li>The Apartment</li>
-            <li>Rovinare</li>
+        <ul data-bind="foreach: locationList">
+            <li data-bind="text: $data.name"></li>
         </ul>
     </div>
 
     <div id="map"></div>
 
-    <script src="js/script.js">
-    </script>
-
+    <script src="js/lib/knockout-3.2.0.js"></script>
+    <script src="js/script.js"></script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU8cIEG1XKbMtfuSYH96y5uF9yzRyc9ZM&v=3&callback=initMap">
     </script>
