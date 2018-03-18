@@ -7,6 +7,7 @@ var map;
 // Model: this is the data used to create the array of markers and list items
 var locations = [
     {name: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
+    {name: 'Serenitea', location: {lat: 11.221357, lng: 125.003836}},
     {name: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
     {name: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
     {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
@@ -148,20 +149,18 @@ function initMap() {
         map.fitBounds(bounds);
     };
 
-    //  use the locations array to create an array of markers on initialize.
-    // can we use the observable array of Location objects to create this markers array???
-
-    for (var i = 0; i < locations.length; i++) {
-        // Get the position from the location array.
-        var position = locations[i].location;
-        var name = locations[i].name;
-        // Create a marker for each location, and put into markers array.
+    //  use the locations array to create an array of markers
+    locations.forEach(function (location, index) {
+        var position = location.location;
+        var name = location.name;
+        var id = index;
+        // Create a marker for each item in the locations array
         var marker = new google.maps.Marker({
             map: map,
             position: position,
             title: name,
             animation: google.maps.Animation.DROP,
-            id: i
+            id: id
         });
         // Push the marker to our array of markers.
         markers.push(marker);
@@ -169,10 +168,11 @@ function initMap() {
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
-        bounds.extend(markers[i].position);
-    }
+        bounds.extend(marker.position);
+    });
     // Extend the boundaries of the map for each marker
     map.fitBounds(bounds);
+
 
     /* This function populates the infowindow when the marker is clicked. We'll only
     allow one infowindow which will open at the marker that is clicked, and populate based
@@ -194,7 +194,7 @@ function initMap() {
     so it can access the populateInfoWindow function when the listItem is clicked */
     var viewModel = function () {
         var self = this;
-        // this refers to the ViewModel binding context
+        // 'this' refers to the ViewModel binding context
 
         this.locationList = ko.observableArray([]);
 
@@ -207,7 +207,7 @@ function initMap() {
         // this function is called when the listItem is clicked in the view
         this.itemClicked = function (clickedListItem) {
             /* we're going to iterate through the markers to get the one which has a
-            matching index to the clickedListItem, then we can call the populateInfoWindow
+            matching index to the clickedistItem, then we can call the populateInfoWindow
             function on that marker */
             markers.forEach( function (marker) {
                 if (self.locationList.indexOf(clickedListItem) === marker.id){
