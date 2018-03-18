@@ -1,4 +1,6 @@
-// Some of these code ideas were borrowed from Udacity Maps API classes
+/* Some of these code ideas were borrowed from Udacity Maps API classes
+and the KnockoutJS classes */
+
 // Create global map variable
 var map;
 
@@ -10,39 +12,18 @@ var locations = [
     {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
 ];
 
-// create a location object with knockout observables
+// create a Location object with knockout observables
 var Location = function (data) {
     this.name = ko.observable(data.name);
     this.location = ko.observable(data.location);
 };
 
-var viewModel = function () {
-    var self = this;
-    // 'this refers to the ViewModel binding context'
-
-    this.locationList = ko.observableArray([]);
-
-    // push locations array values into locationList array
-    locations.forEach(function (listItem) {
-        self.locationList.push( new Location(listItem) );
-    });
-
-    this.itemClicked = function (clickedListItem) {
-        alert("The index/position of " + ko.toJSON(clickedListItem) +
-            " is: " + self.locationList.indexOf(clickedListItem) );
-    }
-
-}
-
-ko.applyBindings(new viewModel());
-
-
 // Create a new blank array for all the listing markers.
 var markers = [];
 
 function initMap() {
-    // create an object which contains the map options center, zoom, and styles
-    // Map style is 'klapsons purple' by Vanlop Ninkhuha from snazzymaps.com
+    /* Create an object which contains the map options: center, zoom, and styles.
+    Map style is 'klapsons purple' by Vanlop Ninkhuha taken from snazzymaps.com */
     var mapOptions = {
         center: {lat: 11.223399, lng: 125.001354},
         zoom: 15,
@@ -155,7 +136,8 @@ function initMap() {
         ]
     };
 
-    // Constructor creates a new map and takes mapOptions as an argument
+    /* Constructor creates a new map and takes the div element and the
+    mapOptions object as arguments */
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     var largeInfowindow = new google.maps.InfoWindow();
@@ -167,6 +149,8 @@ function initMap() {
     };
 
     //  use the locations array to create an array of markers on initialize.
+    // can we use the observable array of Location objects to create this markers array???
+
     for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
         var position = locations[i].location;
@@ -183,16 +167,16 @@ function initMap() {
         markers.push(marker);
         // Create an onclick event to open an infowindow at each marker.
         marker.addListener('click', function() {
-        populateInfoWindow(this, largeInfowindow);
+            populateInfoWindow(this, largeInfowindow);
         });
         bounds.extend(markers[i].position);
     }
     // Extend the boundaries of the map for each marker
     map.fitBounds(bounds);
 
-    // This function populates the infowindow when the marker is clicked. We'll only allow
-    // one infowindow which will open at the marker that is clicked, and populate based
-    // on that markers position.
+    /* This function populates the infowindow when the marker is clicked. We'll only
+    allow one infowindow which will open at the marker that is clicked, and populate based
+    on that marker's position. */
     function populateInfoWindow(marker, infowindow) {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
@@ -205,4 +189,34 @@ function initMap() {
             });
         }
     }
+
+    /* this is the Knockout viewModel. We're placing it inside the initMap function
+    so it can access the populateInfoWindow function when the listItem is clicked */
+    var viewModel = function () {
+        var self = this;
+        // this refers to the ViewModel binding context
+
+        this.locationList = ko.observableArray([]);
+
+        /* push locations array values into locationList observable array
+        this observable array is made up of Location objects */
+        locations.forEach(function (listItem) {
+            self.locationList.push( new Location(listItem) );
+        });
+
+        // this function is called when the listItem is clicked in the view
+        this.itemClicked = function (clickedListItem) {
+            /* we're going to iterate through the markers to get the one which has a
+            matching index to the clickedListItem, then we can call the populateInfoWindow
+            function on that marker */
+            markers.forEach( function (marker) {
+                if (self.locationList.indexOf(clickedListItem) === marker.id){
+                    populateInfoWindow(marker, largeInfowindow);
+                }
+            });
+        }
+    }
+
+    ko.applyBindings(new viewModel());
+
 }
