@@ -8,7 +8,7 @@
 
     <div id="list">
         <ul data-bind="foreach: locationList">
-            <li data-bind="text: ko.toJSON($data), click: $parent.itemClicked"></li>
+            <li data-bind="text: $data.name, click: $parent.itemClicked"></li>
         </ul>
     </div>
 

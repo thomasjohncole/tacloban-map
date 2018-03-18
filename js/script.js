@@ -1,5 +1,5 @@
 /* Some of these code ideas were borrowed from Udacity Maps API classes
-and the KnockoutJS classes */
+and the Udacity KnockoutJS classes */
 
 // Create global map variable
 var map;
@@ -10,10 +10,12 @@ var locations = [
     {name: 'Serenitea', location: {lat: 11.221357, lng: 125.003836}},
     {name: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
     {name: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
-    {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}}
+    {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}},
+    {name: 'Cafe Lucia', location: {lat: 11.218591, lng: 125.006297}},
+    {name: 'ABCD Cafe', location: {lat: 11.244335, lng: 125.002798}}
 ];
 
-// create a Location object with knockout observables
+// Create a Location object with knockout observables.
 var Location = function (data) {
     this.name = ko.observable(data.name);
     this.location = ko.observable(data.location);
@@ -208,7 +210,7 @@ function initMap() {
         this.itemClicked = function (clickedListItem) {
             /* we're going to iterate through the markers to get the one which has a
             matching index to the clickedistItem, then we can call the populateInfoWindow
-            function on that marker */
+            function passing the marker as an argument */
             markers.forEach( function (marker) {
                 if (self.locationList.indexOf(clickedListItem) === marker.id){
                     populateInfoWindow(marker, largeInfowindow);
