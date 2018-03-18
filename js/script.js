@@ -15,6 +15,16 @@ var locations = [
     {name: 'ABCD Cafe', location: {lat: 11.244335, lng: 125.002798}}
 ];
 
+// sort the locations by name
+locations.sort(function(a, b) {
+  if (a.name < b.name) {
+    return -1;
+  }
+  if (a.name > b.name) {
+    return 1;
+  }
+});
+
 // Create a Location object with knockout observables.
 var Location = function (data) {
     this.name = ko.observable(data.name);
