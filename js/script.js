@@ -240,9 +240,9 @@ function initMap() {
         // Create a computed observable.
         this.filteredLocations = ko.computed(function() {
             var filter = self.filter();
-            // If filter does not exist or is set to 'All' then return all of the locations,
-            // otherwise return only the locations which have a type value which matches
-            // the filter value.
+            /* If filter does not exist or is set to 'All' then return all of the
+            locations, otherwise return only the locations which have a 'type' value
+            which matches the filter value. */
             if (!filter || filter === "All") {
                 return self.locations();
             } else {
