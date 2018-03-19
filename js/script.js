@@ -4,19 +4,20 @@ and the Udacity KnockoutJS classes */
 // Create global map variable
 var map;
 
-// Model: this is the data used to create the array of markers and list items
-var locations = [
-    {name: 'The Apartment', location: {lat: 11.223399, lng: 125.001354}},
-    {name: 'Serenitea', location: {lat: 11.221357, lng: 125.003836}},
-    {name: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}},
-    {name: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}},
-    {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}},
-    {name: 'Cafe Lucia', location: {lat: 11.218591, lng: 125.006297}},
-    {name: 'ABCD Cafe', location: {lat: 11.244335, lng: 125.002798}}
-];
-
+// Model: this is the data used to create markers, list items, and dropdown menu
+var initialData = {
+    locations: [
+        {name: 'Serenitea', location: {lat: 11.221357, lng: 125.003836}, type: 'Real Street'},
+        {name: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}, type: 'Real Street'},
+        {name: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}, type: 'Downtown'},
+        {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}, type: 'Uptown'},
+        {name: 'Cafe Lucia', location: {lat: 11.218591, lng: 125.006297}, type: 'Real Street'},
+        {name: 'ABCD Cafe', location: {lat: 11.244335, lng: 125.002798}, type: 'Downtown'}
+    ],
+    filters: ['All', 'Downtown', 'Real Street', 'Uptown']
+};
 // sort the locations by name
-locations.sort(function(a, b) {
+initialData.locations.sort(function(a, b) {
   if (a.name < b.name) {
     return -1;
   }
@@ -27,8 +28,8 @@ locations.sort(function(a, b) {
 
 // Create a Location object with knockout observables.
 var Location = function (data) {
-    this.name = ko.observable(data.name);
-    this.location = ko.observable(data.location);
+    this.name = ko.observable(initialData.locations.name);
+    this.location = ko.observable(initialData.locations.location);
 };
 
 // Create a new blank array for all the listing markers.
@@ -162,7 +163,7 @@ function initMap() {
     };
 
     //  use the locations array to create an array of markers
-    locations.forEach(function (location, index) {
+    initialData.locations.forEach(function (location, index) {
         var position = location.location;
         var name = location.name;
         var id = index;
@@ -204,7 +205,7 @@ function initMap() {
 
     /* this is the Knockout viewModel. We're placing it inside the initMap function
     so it can access the populateInfoWindow function when the listItem is clicked */
-    var viewModel = function () {
+    var viewModel = function (data) {
         var self = this;
         // 'this' refers to the ViewModel binding context
 
@@ -212,9 +213,10 @@ function initMap() {
 
         /* push locations array values into locationList observable array
         this observable array is made up of Location objects */
-        locations.forEach(function (listItem) {
+        initialData.locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
         });
+
 
         // this function is called when the listItem is clicked in the view
         this.itemClicked = function (clickedListItem) {
@@ -227,8 +229,32 @@ function initMap() {
                 }
             });
         }
+
+        // Filter the locations based on the dropdown value.
+        // Create an observable array for the filters.
+        this.filters = ko.observableArray(initialData.filters);
+        // Set the initial filter to blank.
+        this.filter = ko.observable('');
+        // Create an obervable array of the locations.
+        this.locations = ko.observableArray(initialData.locations);
+        // Create a computed observable.
+        this.filteredLocations = ko.computed(function() {
+            var filter = self.filter();
+            // If filter does not exist or is set to 'All' then return all of the locations,
+            // otherwise return only the locations which have a type value which matches
+            // the filter value.
+            if (!filter || filter === "All") {
+                return self.locations();
+            } else {
+                return ko.utils.arrayFilter(self.locations(), function(i) {
+                    return i.type === filter;
+                });
+            }
+        });
+
+
     }
 
-    ko.applyBindings(new viewModel());
+    ko.applyBindings(new viewModel(initialData));
 
 }

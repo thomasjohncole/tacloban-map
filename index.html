@@ -8,16 +8,11 @@
 
     <div id="list">
         <h2>Filter Locations</h2>
-        <select name="filter">
-            <option value="All Locations">All Locations</option>
-            <option value="Downtown Locations">Downtown Locations</option>
-            <option value="Uptown Locations">Uptown Locations</option>
-            <option value="Real Street Locations">Real Street Locations</option>
-            <option value="No Locations">None</option>
+        <select data-bind="options: filters, value: filter">
         </select>
 
-        <ul data-bind="foreach: locationList">
-            <li data-bind="text: $data.name, click: $parent.itemClicked"></li>
+        <ul data-bind="foreach: filteredLocations">
+            <li data-bind="text: name, click: $parent.itemClicked"></li>
         </ul>
     </div>
 
