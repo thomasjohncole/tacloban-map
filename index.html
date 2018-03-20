@@ -7,13 +7,17 @@
   <body>
 
     <div id="list">
-        <h2>Filter Locations</h2>
-        <select data-bind="options: filters, value: filter">
-        </select>
+        <h2>Locations</h2>
+
 
         <ul data-bind="foreach: filteredLocations">
             <li data-bind="text: name, click: $parent.itemClicked"></li>
         </ul>
+
+        <h3>Filter</h3>
+        <select data-bind="options: filters, value: filter">
+        </select>
+
     </div>
 
     <div id="map"></div>

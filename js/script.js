@@ -1,23 +1,20 @@
 /* Some of these code ideas were borrowed from Udacity Maps API classes
 and the Udacity KnockoutJS classes */
 
-// Create global map variable
-var map;
-
 // Model: this is the data used to create markers, list items, and dropdown menu
-var initialData = {
-    locations: [
-        {name: 'Serenitea', location: {lat: 11.221357, lng: 125.003836}, type: 'Real Street'},
-        {name: 'Skye Lounge', location: {lat: 11.237465, lng: 125.002999}, type: 'Real Street'},
-        {name: 'Jose Karlos Cafe', location: {lat: 11.241782, lng: 125.005242}, type: 'Downtown'},
-        {name: 'Rovinare', location: {lat: 11.207398, lng: 125.018457}, type: 'Uptown'},
-        {name: 'Cafe Lucia', location: {lat: 11.218591, lng: 125.006297}, type: 'Real Street'},
-        {name: 'ABCD Cafe', location: {lat: 11.244335, lng: 125.002798}, type: 'Downtown'}
-    ],
-    filters: ['All', 'Downtown', 'Real Street', 'Uptown']
-};
+var locations = [
+        {name: 'Serenitea', position: {lat: 11.221357, lng: 125.003836}, type: 'Real Street'},
+        {name: 'Skye Lounge', position: {lat: 11.237465, lng: 125.002999}, type: 'Real Street'},
+        {name: 'Jose Karlos Cafe', position: {lat: 11.241782, lng: 125.005242}, type: 'Downtown'},
+        {name: 'Rovinare', position: {lat: 11.207398, lng: 125.018457}, type: 'Uptown'},
+        {name: 'Cafe Lucia', position: {lat: 11.218591, lng: 125.006297}, type: 'Real Street'},
+        {name: 'ABCD Cafe', position: {lat: 11.244335, lng: 125.002798}, type: 'Downtown'}
+    ];
+
+var filters = ['All', 'Downtown', 'Real Street', 'Uptown'];
+
 // sort the locations by name
-initialData.locations.sort(function(a, b) {
+locations.sort(function(a, b) {
   if (a.name < b.name) {
     return -1;
   }
@@ -26,13 +23,10 @@ initialData.locations.sort(function(a, b) {
   }
 });
 
-// Create a Location object with knockout observables.
-var Location = function (data) {
-    this.name = ko.observable(initialData.locations.name);
-    this.location = ko.observable(initialData.locations.location);
-};
+// Create global map variable
+var map;
 
-// Create a new blank array for all the listing markers.
+// Create a new global array which will eventually contain map markers.
 var markers = [];
 
 function initMap() {
@@ -157,36 +151,6 @@ function initMap() {
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
-    // Recenter map on window resize to fit markers
-    window.onresize = function () {
-        map.fitBounds(bounds);
-    };
-
-    //  use the locations array to create an array of markers
-    initialData.locations.forEach(function (location, index) {
-        var position = location.location;
-        var name = location.name;
-        var id = index;
-        // Create a marker for each item in the locations array
-        var marker = new google.maps.Marker({
-            map: map,
-            position: position,
-            title: name,
-            animation: google.maps.Animation.DROP,
-            id: id
-        });
-        // Push the marker to our array of markers.
-        markers.push(marker);
-        // Create an onclick event to open an infowindow at each marker.
-        marker.addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
-        });
-        bounds.extend(marker.position);
-    });
-    // Extend the boundaries of the map for each marker
-    map.fitBounds(bounds);
-
-
     /* This function populates the infowindow when the marker is clicked. We'll only
     allow one infowindow which will open at the marker that is clicked, and populate based
     on that marker's position. */
@@ -203,58 +167,90 @@ function initMap() {
         }
     }
 
-    /* this is the Knockout viewModel. We're placing it inside the initMap function
-    so it can access the populateInfoWindow function when the listItem is clicked */
-    var viewModel = function (data) {
+    // this is the Knockout viewModel.
+    var viewModel = function () {
         var self = this;
-        // 'this' refers to the ViewModel binding context
+
+        // This function will be used to add new Location objects to the locationList
+        // Do we need to pass these in?  (data, id, map)
+        var Location = function (data) {
+            this.name = data.name;
+            this.position = data.position;
+            this.type = data.type;
+            //this.marker = '';
+            // this.markerID = id;
+        };
 
         this.locationList = ko.observableArray([]);
 
-        /* push locations array values into locationList observable array
-        this observable array is made up of Location objects */
-        initialData.locations.forEach(function (listItem) {
+        /* Iterate through locations array values then pass value into locationList
+        observable array. Each pass pushes a new Location object to locationList */
+        locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
         });
 
+        // Use the locationList observableArray to create array of markers
+        // you can pass an index as the second(optional) parameter of forEach
+        // need to put parenthesis after locationList because ????
+        // this.locationList().forEach(function (listItem) {
+        //     var position = listItem.position;
+        //     console.log(position);
+        //     // Create a marker for each Location object
+        //     var marker = new google.maps.Marker({
+        //         map: map,
+        //         position: position,
+        //         title: name,
+        //         animation: google.maps.Animation.DROP,
+        //     });
+        //     // Push the marker to our array of markers.
+        //     // markers.push(marker);
+
+        //     listItem.marker = marker;
+
+        //     // add the marker object to the marker array??
+
+        //     // Create an onclick event to open an infowindow at each marker.
+        //     marker.addListener('click', function() {
+        //         populateInfoWindow(this, largeInfowindow);
+        //     });
+        //     bounds.extend(marker.position);
+        // });
+        // // Extend the boundaries of the map for each marker
+        // map.fitBounds(bounds);
+
+        // Recenter map on window resize to fit markers
+        // this doesn't work right now because the markers aren't being created
+        window.onresize = function () {
+            map.fitBounds(bounds);
+        };
 
         // this function is called when the listItem is clicked in the view
         this.itemClicked = function (clickedListItem) {
-            /* we're going to iterate through the markers to get the one which has a
-            matching index to the clickedistItem, then we can call the populateInfoWindow
-            function passing the marker as an argument */
-            markers.forEach( function (marker) {
-                if (self.locationList.indexOf(clickedListItem) === marker.id){
-                    populateInfoWindow(marker, largeInfowindow);
-                }
-            });
+            // stuff goes here
         }
 
-        // Filter the locations based on the dropdown value.
-        // Create an observable array for the filters.
-        this.filters = ko.observableArray(initialData.filters);
+        // Create an observable array and pass it the 'filters' global array
+        this.filters = ko.observableArray(filters);
         // Set the initial filter to blank.
         this.filter = ko.observable('');
-        // Create an obervable array of the locations.
-        this.locations = ko.observableArray(initialData.locations);
-        // Create a computed observable.
+
+        // Create a computed observable which filters locations based on type.
         this.filteredLocations = ko.computed(function() {
             var filter = self.filter();
-            /* If filter does not exist or is set to 'All' then return all of the
+            /* If filter does not exist OR is set to 'All' then return all of the
             locations, otherwise return only the locations which have a 'type' value
             which matches the filter value. */
             if (!filter || filter === "All") {
-                return self.locations();
+                return self.locationList();
             } else {
-                return ko.utils.arrayFilter(self.locations(), function(i) {
-                    return i.type === filter;
+                return ko.utils.arrayFilter( self.locationList(), function(arrayItem) {
+                    return arrayItem.type == filter;
                 });
             }
         });
 
-
     }
 
-    ko.applyBindings(new viewModel(initialData));
+    ko.applyBindings(new viewModel());
 
 }
