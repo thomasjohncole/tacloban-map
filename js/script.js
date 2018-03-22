@@ -26,15 +26,12 @@ locations.sort(function(a, b) {
 // Create global map variable
 var map;
 
-// Create a new global array which will eventually contain map markers.
-var markers = [];
-
 function initMap() {
     /* Create an object which contains the map options: center, zoom, and styles.
-    Map style is 'klapsons purple' by Vanlop Ninkhuha taken from snazzymaps.com */
+    Map styles are 'klapsons purple' by Vanlop Ninkhuha taken from snazzymaps.com */
     var mapOptions = {
         center: {lat: 11.223399, lng: 125.001354},
-        zoom: 15,
+        zoom: 14,
         styles: [
         {
             "featureType": "all",
@@ -162,7 +159,7 @@ function initMap() {
             infowindow.open(map, marker);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick',function(){
-            infowindow.setMarker = null;
+                infowindow.setMarker = null;
             });
         }
     }
@@ -170,14 +167,14 @@ function initMap() {
     // this is the Knockout viewModel.
     var viewModel = function () {
         var self = this;
-
-        // This function will be used to add new Location objects to the locationList
+        // Constructor function creates an object of type Location when called
+        // No 'class' declaration available until ES6, just types
         // Do we need to pass these in?  (data, id, map)
-        var Location = function (data) {
+        var Location = function (data, map) {
             this.name = data.name;
             this.position = data.position;
             this.type = data.type;
-            //this.marker = '';
+            this.marker = '';
             // this.markerID = id;
         };
 
@@ -189,44 +186,37 @@ function initMap() {
             self.locationList.push( new Location(listItem) );
         });
 
-        // Use the locationList observableArray to create array of markers
-        // you can pass an index as the second(optional) parameter of forEach
-        // need to put parenthesis after locationList because ????
-        // this.locationList().forEach(function (listItem) {
-        //     var position = listItem.position;
-        //     console.log(position);
-        //     // Create a marker for each Location object
-        //     var marker = new google.maps.Marker({
-        //         map: map,
-        //         position: position,
-        //         title: name,
-        //         animation: google.maps.Animation.DROP,
-        //     });
-        //     // Push the marker to our array of markers.
-        //     // markers.push(marker);
+        // Use the locationList observableArray to create map markers
+        // and create a marker for each Location object in the array
+        this.locationList().forEach(function (listItem) {
+            var marker = new google.maps.Marker({
+                map: map,
+                position: listItem.position,
+                title: listItem.name,
+                animation: google.maps.Animation.DROP,
+            });
+            // assign the newly created marker object to the marker property of
+            // the corresponding 'Location' object
+            listItem.marker = marker;
+            // extends the map bounds as per marker positions
+            bounds.extend(marker.position);
 
-        //     listItem.marker = marker;
+            // Create an onclick event to open an infowindow per marker.
+            marker.addListener('click', function() {
+                populateInfoWindow(this, largeInfowindow);
+            });
+        });
+        // make sure markers are visible in window, lower zoom value if needed
+        map.fitBounds(bounds);
 
-        //     // add the marker object to the marker array??
-
-        //     // Create an onclick event to open an infowindow at each marker.
-        //     marker.addListener('click', function() {
-        //         populateInfoWindow(this, largeInfowindow);
-        //     });
-        //     bounds.extend(marker.position);
-        // });
-        // // Extend the boundaries of the map for each marker
-        // map.fitBounds(bounds);
-
-        // Recenter map on window resize to fit markers
-        // this doesn't work right now because the markers aren't being created
+        // Recenter map on window resize to accomodate markers
         window.onresize = function () {
             map.fitBounds(bounds);
         };
 
         // this function is called when the listItem is clicked in the view
         this.itemClicked = function (clickedListItem) {
-            // stuff goes here
+            populateInfoWindow(clickedListItem.marker, largeInfowindow);
         }
 
         // Create an observable array and pass it the 'filters' global array
@@ -237,13 +227,14 @@ function initMap() {
         // Create a computed observable which filters locations based on type.
         this.filteredLocations = ko.computed(function() {
             var filter = self.filter();
-            /* If filter does not exist OR is set to 'All' then return all of the
+            /* If filter is false OR is set to 'All' then return all of the
             locations, otherwise return only the locations which have a 'type' value
             which matches the filter value. */
             if (!filter || filter === "All") {
                 return self.locationList();
             } else {
                 return ko.utils.arrayFilter( self.locationList(), function(arrayItem) {
+                    // arrayItem.marker.setVisible(false);
                     return arrayItem.type == filter;
                 });
             }
