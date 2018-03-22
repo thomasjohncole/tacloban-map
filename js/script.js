@@ -231,10 +231,19 @@ function initMap() {
             locations, otherwise return only the locations which have a 'type' value
             which matches the filter value. */
             if (!filter || filter === "All") {
-                return self.locationList();
+
+                return ko.utils.arrayFilter( self.locationList(), function(arrayItem) {
+                    arrayItem.marker.setVisible(true);
+                    return self.locationList();
+                });
             } else {
                 return ko.utils.arrayFilter( self.locationList(), function(arrayItem) {
-                    // arrayItem.marker.setVisible(false);
+                    // set visibility to true first, since the marker may be
+                    // invisible from a
+                    arrayItem.marker.setVisible(true);
+                    if (arrayItem.type != filter) {
+                        arrayItem.marker.setVisible(false);
+                    }
                     return arrayItem.type == filter;
                 });
             }
