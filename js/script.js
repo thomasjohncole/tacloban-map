@@ -3,13 +3,39 @@ and the Udacity KnockoutJS classes */
 
 // Model: this is the data used to create markers, list items, and dropdown menu
 var locations = [
-        {name: 'Serenitea', position: {lat: 11.221357, lng: 125.003836}, type: 'Real Street'},
-        {name: 'Skye Lounge', position: {lat: 11.237465, lng: 125.002999}, type: 'Real Street'},
-        {name: 'Jose Karlos Cafe', position: {lat: 11.241782, lng: 125.005242}, type: 'Downtown'},
-        {name: 'Rovinare', position: {lat: 11.207398, lng: 125.018457}, type: 'Uptown'},
-        {name: 'Cafe Lucia', position: {lat: 11.218591, lng: 125.006297}, type: 'Real Street'},
-        {name: 'ABCD Cafe', position: {lat: 11.244335, lng: 125.002798}, type: 'Downtown'}
+        {
+            name: 'Serenitea',
+            position: {lat: 11.221357, lng: 125.003836},
+            type: 'Real Street'
+        },
+        {
+            name: 'Skye Lounge',
+            position: {lat: 11.237465, lng: 125.002999},
+            type: 'Real Street'
+        },
+        {
+            name: 'Jose Karlos Cafe',
+            position: {lat: 11.241782, lng: 125.005242},
+            type: 'Downtown'
+        },
+        {
+            name: 'Rovinare',
+            position: {lat: 11.207398, lng: 125.018457},
+            type: 'Uptown'
+        },
+        {
+            name: 'Cafe Lucia',
+            position: {lat: 11.218591, lng: 125.006297},
+            type: 'Real Street'
+        },
+        {
+            name: 'ABCD Cafe',
+            position: {lat: 11.244335, lng: 125.002798},
+            type: 'Downtown'
+        }
     ];
+
+// venue ID for Rovinare? 58241574b04e981d14efa4cc
 
 var filters = ['All', 'Downtown', 'Real Street', 'Uptown'];
 
