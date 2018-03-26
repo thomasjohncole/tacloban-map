@@ -36,6 +36,18 @@ var locations = [
     ];
 
 // venue ID for Rovinare? 58241574b04e981d14efa4cc
+// venue ID for Cafe Lucia 546c72b4498ebfe8af97db76
+// venue ID for Jose Karlos 5823d7c4d1efa6541ad2ae30
+// venue ID for ABCD 51c2ebe4498ea4fe1cf353f8
+// venue ID for SKye 5777e920498ecedd942ed04
+// venue ID for Serenitea 57ac5646498ea62681e9636d
+
+
+// Foursquare API stuff
+var fsURL = "https://api.foursquare.com/v2/venues/",
+    fsClientID = "client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ",
+    fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT",
+    fsVersion = "&v=20180323";
 
 var filters = ['All', 'Downtown', 'Real Street', 'Uptown'];
 
