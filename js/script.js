@@ -6,42 +6,40 @@ var locations = [
         {
             name: 'Serenitea',
             position: {lat: 11.221357, lng: 125.003836},
-            type: 'Real Street'
+            type: 'Real Street',
+            venueID: '57ac5646498ea62681e9636d'
         },
         {
             name: 'Skye Lounge',
             position: {lat: 11.237465, lng: 125.002999},
-            type: 'Real Street'
+            type: 'Real Street',
+            venueID: '5777e920498ecedd942ed04'
         },
         {
             name: 'Jose Karlos Cafe',
             position: {lat: 11.241782, lng: 125.005242},
-            type: 'Downtown'
+            type: 'Downtown',
+            venueID: '5823d7c4d1efa6541ad2ae30'
         },
         {
             name: 'Rovinare',
             position: {lat: 11.207398, lng: 125.018457},
-            type: 'Uptown'
+            type: 'Uptown',
+            venueID: '58241574b04e981d14efa4cc'
         },
         {
             name: 'Cafe Lucia',
             position: {lat: 11.218591, lng: 125.006297},
-            type: 'Real Street'
+            type: 'Real Street',
+            venueID: '546c72b4498ebfe8af97db76'
         },
         {
             name: 'ABCD Cafe',
             position: {lat: 11.244335, lng: 125.002798},
-            type: 'Downtown'
+            type: 'Downtown',
+            venueID: '51c2ebe4498ea4fe1cf353f8'
         }
     ];
-
-// venue ID for Rovinare? 58241574b04e981d14efa4cc
-// venue ID for Cafe Lucia 546c72b4498ebfe8af97db76
-// venue ID for Jose Karlos 5823d7c4d1efa6541ad2ae30
-// venue ID for ABCD 51c2ebe4498ea4fe1cf353f8
-// venue ID for SKye 5777e920498ecedd942ed04
-// venue ID for Serenitea 57ac5646498ea62681e9636d
-
 
 // Foursquare API stuff
 var fsURL = "https://api.foursquare.com/v2/venues/",
