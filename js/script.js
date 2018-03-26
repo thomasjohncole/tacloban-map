@@ -194,7 +194,7 @@ function initMap() {
     var viewModel = function () {
         var self = this;
         // Constructor function creates an object of type Location when called
-        // No 'class' declaration available until ES6, just types
+        // with the 'new' keyword - this will be used to populate the locationList
         // Do we need to pass these in?  (data, id, map)
         var Location = function (data, map) {
             this.name = data.name;
@@ -207,7 +207,8 @@ function initMap() {
         this.locationList = ko.observableArray([]);
 
         /* Iterate through locations array values then pass value into locationList
-        observable array. Each pass pushes a new Location object to locationList */
+        observable array. Each pass pushes a new instance of the Location object
+        to the locationList */
         locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
         });
