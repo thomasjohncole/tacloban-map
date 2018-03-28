@@ -42,14 +42,16 @@ var locations = [
     ];
 
 // Define variables for use with Foursquare API
-var fsURL = "https://api.foursquare.com/v2/venues/",
-    fsClientID = "client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ",
-    fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT",
-    fsVersion = "&v=20180323";
+var fsInitialURL = "https://api.foursquare.com/v2/venues/";
+var fsVersion = "?v=20180323";
+var fsClientID = "&client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ";
+var fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT";
 
+
+// filters to use for dropdown menu
 var filters = ['All', 'Downtown', 'Real Street', 'Uptown'];
 
-// sort the locations by name
+// sort the locations alpha by name
 locations.sort(function(a, b) {
   if (a.name < b.name) {
     return -1;
@@ -194,7 +196,7 @@ function initMap() {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
             infowindow.marker = marker;
-            infowindow.setContent('<div>' + marker.title + '</div>');
+            infowindow.setContent('<div>' + marker.name + '</div>');
             infowindow.open(map, marker);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick',function(){
@@ -213,31 +215,49 @@ function initMap() {
             this.name = data.name;
             this.position = data.position;
             this.type = data.type;
-            this.marker = '';
+            this.marker = ''; // gets assigned later when markers are created
+            this.venueID = data.venueID; // Foursquare venue ID from locations array
+            // next two values come from Foursquare API when $.getJSON runs
+            this.fsTitle = '';
+            this.fsAddress = '';
+
+
             // this.markerID = id;
         };
 
         this.locationList = ko.observableArray([]);
 
-        /* Iterate through locations array values then pass value into locationList
-        observable array. Each pass pushes a new instance of the Location object
-        to the locationList */
+        /* Iterate through locations array. For each item/object in the array,
+        create a new instance of the Location object and push it to the
+        locationList observable array. */
         locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
-            console.log(listItem.name);
-            console.log(listItem.venueID);
+            // console.log(listItem.name);
+            // console.log(listItem.venueID);
         });
+
+        // Get Foursquare data and add it to the Location objects.
+
+
+        this.locationList().forEach(function (listItem) {
+            var fsFullURL = fsInitialURL +
+                        listItem.venueID +
+                        fsVersion +
+                        fsClientID +
+                        fsClientSecret;
+            console.log(fsFullURL);
+
+        });
+
 
         // Use the locationList observableArray to create map markers
         // and create a marker for each Location object in the array
-        // can we just add venueID here?? Do we need it??
         this.locationList().forEach(function (listItem) {
             var marker = new google.maps.Marker({
-                map: map,
-                position: listItem.position,
-                title: listItem.name,
+                map: map, // specifies the map on which to place the marker
+                position: listItem.position, // the only required value
+                name: listItem.name,
                 animation: google.maps.Animation.DROP,
-                // venueID: listItem.venueID
             });
             // assign the newly created marker object to the marker property of
             // the corresponding 'Location' object
@@ -247,7 +267,8 @@ function initMap() {
 
             // Create an onclick event to open an infowindow per marker.
             marker.addListener('click', function() {
-                populateInfoWindow(this, largeInfowindow);
+                populateInfoWindow(this, largeInfowindow); // 'this' is the marker object
+                console.log(this);
             });
         });
         // make sure markers are visible in window, lower zoom value if needed
@@ -259,6 +280,7 @@ function initMap() {
         };
 
         // this function is called when the listItem is clicked in the view
+        // passes the appropriate marker as argument
         this.itemClicked = function (clickedListItem) {
             populateInfoWindow(clickedListItem.marker, largeInfowindow);
         }
