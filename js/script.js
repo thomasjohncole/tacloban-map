@@ -245,7 +245,10 @@ function initMap() {
                         fsVersion +
                         fsClientID +
                         fsClientSecret;
-            console.log(fsFullURL);
+            // console.log(fsFullURL);
+            $.getJSON(fsFullURL, function (data) {
+                console.log(data.response.venue.name);
+            });
 
         });
 
