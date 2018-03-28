@@ -13,7 +13,7 @@ var locations = [
             name: 'Skye Lounge',
             position: {lat: 11.237465, lng: 125.002999},
             type: 'Real Street',
-            venueID: '5777e920498ecedd942ed04'
+            venueID: '5777e920498ecedd942ed04d'
         },
         {
             name: 'Jose Karlos Cafe',
@@ -41,7 +41,7 @@ var locations = [
         }
     ];
 
-// Foursquare API stuff
+// Define variables for use with Foursquare API
 var fsURL = "https://api.foursquare.com/v2/venues/",
     fsClientID = "client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ",
     fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT",
@@ -59,8 +59,11 @@ locations.sort(function(a, b) {
   }
 });
 
-// Create global map variable
-var map;
+// Create global map variable - Why do I need this?????
+// Commenting it out until something goes wrong, as I see nothing
+// In the global execution context that requires this to be defined
+// Outside of initMap
+// var map;
 
 function initMap() {
     /* Create an object which contains the map options: center, zoom, and styles.
@@ -221,16 +224,20 @@ function initMap() {
         to the locationList */
         locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
+            console.log(listItem.name);
+            console.log(listItem.venueID);
         });
 
         // Use the locationList observableArray to create map markers
         // and create a marker for each Location object in the array
+        // can we just add venueID here?? Do we need it??
         this.locationList().forEach(function (listItem) {
             var marker = new google.maps.Marker({
                 map: map,
                 position: listItem.position,
                 title: listItem.name,
                 animation: google.maps.Animation.DROP,
+                // venueID: listItem.venueID
             });
             // assign the newly created marker object to the marker property of
             // the corresponding 'Location' object
