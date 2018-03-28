@@ -218,7 +218,7 @@ function initMap() {
             this.marker = ''; // gets assigned later when markers are created
             this.venueID = data.venueID; // Foursquare venue ID from locations array
             // next two values come from Foursquare API when $.getJSON runs
-            this.fsTitle = '';
+            this.fsName = '';
             this.fsAddress = '';
 
 
@@ -236,9 +236,7 @@ function initMap() {
             // console.log(listItem.venueID);
         });
 
-        // Get Foursquare data and add it to the Location objects.
-
-
+        // Get Foursquare data and add it to the Location object properties
         this.locationList().forEach(function (listItem) {
             var fsFullURL = fsInitialURL +
                         listItem.venueID +
@@ -247,7 +245,13 @@ function initMap() {
                         fsClientSecret;
             // console.log(fsFullURL);
             $.getJSON(fsFullURL, function (data) {
-                console.log(data.response.venue.name);
+                // console.log(data.response.venue.name);
+                listItem.fsName = data.response.venue.name;
+                listItem.fsAddress = data.response.venue.location.formattedAddress;
+                console.log(listItem.fsName);
+                console.log(listItem.fsAddress);
+
+
             });
 
         });
