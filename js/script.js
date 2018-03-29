@@ -41,7 +41,7 @@ var locations = [
         }
     ];
 
-// Define variables for use with Foursquare API
+// Define variables to construct the URL for the Foursquare API request
 var fsInitialURL = "https://api.foursquare.com/v2/venues/";
 var fsVersion = "?v=20180323";
 var fsClientID = "&client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ";
@@ -64,8 +64,9 @@ locations.sort(function(a, b) {
 // Create global map variable - Why do I need this?????
 // Commenting it out until something goes wrong, as I see nothing
 // In the global execution context that requires this to be defined
-// Outside of initMap
+// Outside of initMap - Maybe I need this if the map doesn't load?
 // var map;
+// var marker;
 
 function initMap() {
     /* Create an object which contains the map options: center, zoom, and styles.
@@ -196,7 +197,8 @@ function initMap() {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
             infowindow.marker = marker;
-            infowindow.setContent('<div>' + marker.name + '</div>');
+            console.log(marker.fsName);
+            infowindow.setContent('<div>' + marker.fsName + marker.fsAddress + '</div>');
             infowindow.open(map, marker);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick',function(){
@@ -210,19 +212,13 @@ function initMap() {
         var self = this;
         // Constructor function creates an object of type Location when called
         // with the 'new' keyword - this will be used to populate the locationList
-        // Do we need to pass these in?  (data, id, map)
+        // Do we need to pass the map argument?
         var Location = function (data, map) {
             this.name = data.name;
             this.position = data.position;
             this.type = data.type;
+            this.venueID = data.venueID; // Foursquare venue ID
             this.marker = ''; // gets assigned later when markers are created
-            this.venueID = data.venueID; // Foursquare venue ID from locations array
-            // next two values come from Foursquare API when $.getJSON runs
-            this.fsName = '';
-            this.fsAddress = '';
-
-
-            // this.markerID = id;
         };
 
         this.locationList = ko.observableArray([]);
@@ -232,42 +228,45 @@ function initMap() {
         locationList observable array. */
         locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
-            // console.log(listItem.name);
-            // console.log(listItem.venueID);
         });
 
-        // Get Foursquare data and add it to the Location object properties
+        // Build a Foursquare API URL using the venue ID for each Location object
+        // Note: Code in this function will run AFTER everything else
+        // executes because it is asynchronous
         this.locationList().forEach(function (listItem) {
             var fsFullURL = fsInitialURL +
                         listItem.venueID +
                         fsVersion +
                         fsClientID +
                         fsClientSecret;
-            // console.log(fsFullURL);
+            // Get data from Foursquare and assign values to Location properties
             $.getJSON(fsFullURL, function (data) {
-                // console.log(data.response.venue.name);
-                listItem.fsName = data.response.venue.name;
-                listItem.fsAddress = data.response.venue.location.formattedAddress;
-                console.log(listItem.fsName);
-                console.log(listItem.fsAddress);
-
-
+                listItem.marker.fsName = data.response.venue.name;
+                listItem.marker.fsAddress = data.response.venue.location.formattedAddress;
+            }).error(function(err) {
+                alert("No Foursquare data is available at this time");
             });
-
         });
 
-
         // Use the locationList observableArray to create map markers
-        // and create a marker for each Location object in the array
+        // Create a marker for each Location object in the array
         this.locationList().forEach(function (listItem) {
             var marker = new google.maps.Marker({
                 map: map, // specifies the map on which to place the marker
                 position: listItem.position, // the only required value
                 name: listItem.name,
+                fsName: listItem.fsName, // the name from Foursquare
+                fsAddress: listItem.fsAddress, // the address from Foursquare
                 animation: google.maps.Animation.DROP,
             });
-            // assign the newly created marker object to the marker property of
-            // the corresponding 'Location' object
+
+            // console.log(marker.name); // this works
+            console.log(marker.fsName);  // this is still empty because $.getJSON
+            // hasn't run yet.... hmmm.........
+
+            // Assign the newly created marker object to the marker property of
+            // the corresponding 'Location' object - This is what allows the filter
+            // function work on BOTH the list and the markers simultaneously
             listItem.marker = marker;
             // extends the map bounds as per marker positions
             bounds.extend(marker.position);
@@ -312,7 +311,7 @@ function initMap() {
             } else {
                 return ko.utils.arrayFilter( self.locationList(), function(arrayItem) {
                     // set visibility to true first, since the marker may be
-                    // invisible from a
+                    // invisible from a previous else loop execution
                     arrayItem.marker.setVisible(true);
                     if (arrayItem.type != filter) {
                         arrayItem.marker.setVisible(false);
