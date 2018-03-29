@@ -197,8 +197,14 @@ function initMap() {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
             infowindow.marker = marker;
-            console.log(marker.fsName);
-            infowindow.setContent('<div>' + marker.fsName + marker.fsAddress + '</div>');
+            address = '';
+            marker.fsAddress.forEach(function (line){
+                address += line + '</br>';
+            });
+            infowindow.setContent('<div>' +
+                                  '<strong>' + marker.fsName + '</strong>' +
+                                  '</br>' + address +
+                                  '</div>');
             infowindow.open(map, marker);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick',function(){
@@ -210,6 +216,7 @@ function initMap() {
     // this is the Knockout viewModel.
     var viewModel = function () {
         var self = this;
+
         // Constructor function creates an object of type Location when called
         // with the 'new' keyword - this will be used to populate the locationList
         // Do we need to pass the map argument?
@@ -232,14 +239,14 @@ function initMap() {
 
         // Build a Foursquare API URL using the venue ID for each Location object
         // Note: Code in this function will run AFTER everything else
-        // executes because it is asynchronous
+        // executes because $.getJSON is asynchronous
         this.locationList().forEach(function (listItem) {
             var fsFullURL = fsInitialURL +
                         listItem.venueID +
                         fsVersion +
                         fsClientID +
                         fsClientSecret;
-            // Get data from Foursquare and assign values to Location properties
+            // Get data from Foursquare and assign values to Location.marker properties
             $.getJSON(fsFullURL, function (data) {
                 listItem.marker.fsName = data.response.venue.name;
                 listItem.marker.fsAddress = data.response.venue.location.formattedAddress;
@@ -260,10 +267,6 @@ function initMap() {
                 animation: google.maps.Animation.DROP,
             });
 
-            // console.log(marker.name); // this works
-            console.log(marker.fsName);  // this is still empty because $.getJSON
-            // hasn't run yet.... hmmm.........
-
             // Assign the newly created marker object to the marker property of
             // the corresponding 'Location' object - This is what allows the filter
             // function work on BOTH the list and the markers simultaneously
@@ -274,7 +277,6 @@ function initMap() {
             // Create an onclick event to open an infowindow per marker.
             marker.addListener('click', function() {
                 populateInfoWindow(this, largeInfowindow); // 'this' is the marker object
-                console.log(this);
             });
         });
         // make sure markers are visible in window, lower zoom value if needed
