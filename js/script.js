@@ -190,47 +190,41 @@ function initMap() {
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
-    /* This function populates the infowindow when the marker is clicked. We'll only
-    allow one infowindow which will open at the marker that is clicked, and populate based
-    on that marker's position. */
+    // This function populates the infowindow when the marker is clicked
     function populateInfoWindow(marker, infowindow) {
-        // Check to make sure the infowindow is not already opened on this marker.
-        if (infowindow.marker != marker) {
-            infowindow.marker = marker;
-            if (marker.fsAddress) {
-                address = '';
-                marker.fsAddress.forEach(function (line){
-                    address += line + '</br>';
-                });
+        infowindow.marker = marker;
+        if (marker.fsAddress) {
+            address = '';
+            // The formattedAddress returned from the API request is an array,
+            // so we can loop through it and add line breaks for display
+            marker.fsAddress.forEach(function (line){
+                address += line + '</br>';
+            });
 
-                    infowindow.setContent('<div>' +
-                                          '<strong>' + marker.fsName + '</strong>' +
-                                          '</br>' + address +
-                                          '</br>(Address provided by Foursquare)' +
-                                          '</br><a href="http://foursquare.com/v/' +
-                                          marker.fsVenueID +
-                                          '"><img src="img/foursquare150.png"></a>' +
-                                          '</div>');
-                    infowindow.open(map, marker);
-                    // Make sure the marker property is cleared if the infowindow is closed.
-                    infowindow.addListener('closeclick',function(){
-                        infowindow.setMarker = null;
-                    });
-
-            } else {
-                infowindow.setContent('<div>' +
-                                      '<strong>' + marker.name + '</strong>' +
-                                      '</br>' +
-                                      "Foursquare data currently unavailable." +
-                                      '</div>');
-                infowindow.open(map, marker);
-                // Make sure the marker property is cleared if the infowindow is closed.
-                infowindow.addListener('closeclick',function(){
-                    infowindow.setMarker = null;
-
-                });
-            }
+            infowindow.setContent('<div>' +
+                                  '<strong>' + marker.fsName + '</strong>' +
+                                  '</br>' + address +
+                                  '</br>(Address provided by Foursquare)' +
+                                  '</br><a href="http://foursquare.com/v/' +
+                                  marker.fsVenueID +
+                                  '"><img src="img/foursquare150.png"></a>' +
+                                  '</div>');
+        } else {
+            // Error fallback in case $.getJSON function response is empty
+            infowindow.setContent('<div>' +
+                                  '<strong>' + marker.name + '</strong>' +
+                                  '</br>' +
+                                  "Foursquare data currently unavailable." +
+                                  '</div>');
         }
+
+        infowindow.open(map, marker);
+        console.log("infowindow is open");
+        // Make sure the marker property is cleared if the infowindow is closed.
+        // infowindow.addListener('closeclick',function(){
+        //     // infowindow.setMarker = null;
+        //     console.log("infowindow is closed!");
+        // });
     }
 
     // this is the Knockout viewModel.
