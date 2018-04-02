@@ -197,19 +197,38 @@ function initMap() {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
             infowindow.marker = marker;
-            address = '';
-            marker.fsAddress.forEach(function (line){
-                address += line + '</br>';
-            });
-            infowindow.setContent('<div>' +
-                                  '<strong>' + marker.fsName + '</strong>' +
-                                  '</br>' + address +
-                                  '</div>');
-            infowindow.open(map, marker);
-            // Make sure the marker property is cleared if the infowindow is closed.
-            infowindow.addListener('closeclick',function(){
-                infowindow.setMarker = null;
-            });
+            if (marker.fsAddress) {
+                address = '';
+                marker.fsAddress.forEach(function (line){
+                    address += line + '</br>';
+                });
+
+                    infowindow.setContent('<div>' +
+                                          '<strong>' + marker.fsName + '</strong>' +
+                                          '</br>' + address +
+                                          '</br><a href="http://foursquare.com/v/' +
+                                          marker.fsVenueID +
+                                          '"><img src="img/foursquare150.png"></a>' +
+                                          '</div>');
+                    infowindow.open(map, marker);
+                    // Make sure the marker property is cleared if the infowindow is closed.
+                    infowindow.addListener('closeclick',function(){
+                        infowindow.setMarker = null;
+                    });
+
+            } else {
+                infowindow.setContent('<div>' +
+                                      '<strong>' + marker.name + '</strong>' +
+                                      '</br>' +
+                                      "Foursquare data currently unavailable." +
+                                      '</div>');
+                infowindow.open(map, marker);
+                // Make sure the marker property is cleared if the infowindow is closed.
+                infowindow.addListener('closeclick',function(){
+                    infowindow.setMarker = null;
+
+                });
+            }
         }
     }
 
@@ -240,6 +259,7 @@ function initMap() {
         // Build a Foursquare API URL using the venue ID for each Location object
         // Note: Code in this function will run AFTER everything else
         // executes because $.getJSON is asynchronous
+
         this.locationList().forEach(function (listItem) {
             var fsFullURL = fsInitialURL +
                         listItem.venueID +
@@ -250,8 +270,6 @@ function initMap() {
             $.getJSON(fsFullURL, function (data) {
                 listItem.marker.fsName = data.response.venue.name;
                 listItem.marker.fsAddress = data.response.venue.location.formattedAddress;
-            }).error(function(err) {
-                alert("No Foursquare data is available at this time");
             });
         });
 
@@ -264,6 +282,7 @@ function initMap() {
                 name: listItem.name,
                 fsName: listItem.fsName, // the name from Foursquare
                 fsAddress: listItem.fsAddress, // the address from Foursquare
+                fsVenueID: listItem.venueID, // Foursquare venue ID
                 animation: google.maps.Animation.DROP,
             });
 
