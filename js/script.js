@@ -206,6 +206,7 @@ function initMap() {
                     infowindow.setContent('<div>' +
                                           '<strong>' + marker.fsName + '</strong>' +
                                           '</br>' + address +
+                                          '</br>(Address provided by Foursquare)' +
                                           '</br><a href="http://foursquare.com/v/' +
                                           marker.fsVenueID +
                                           '"><img src="img/foursquare150.png"></a>' +
