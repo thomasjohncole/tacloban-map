@@ -335,6 +335,8 @@ function initMap() {
                     arrayItem.marker.setVisible(true);
                     if (arrayItem.type != filter) {
                         arrayItem.marker.setVisible(false);
+                        // close any open infowindows when filter is applied
+                        largeInfowindow.close(largeInfowindow);
                     }
                     return arrayItem.type == filter;
                 });
