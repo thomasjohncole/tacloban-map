@@ -348,3 +348,10 @@ function initMap() {
     ko.applyBindings(new viewModel());
 
 }
+
+function googleMapsAPIError() {
+    alert("Google Maps API did not load!\nTry a refresh?\n" +
+          "Turn it off and on again?\nAre you behind a firewall?\n" +
+          "Are you online?\nMaybe just try again later.");
+}
+
