@@ -192,7 +192,8 @@ function initMap() {
 
     // This function populates the infowindow when the marker is clicked
     function populateInfoWindow(marker, infowindow) {
-        infowindow.marker = marker;
+        // infowindow.marker = marker;
+        // marker.setIcon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
         if (marker.fsAddress) {
             address = '';
             // The formattedAddress returned from the API request is an array,
@@ -207,6 +208,7 @@ function initMap() {
                                   '</br>(Address provided by Foursquare)' +
                                   '</br><a href="http://foursquare.com/v/' +
                                   marker.fsVenueID +
+                                  '" target="_blank"' +
                                   '"><img src="img/foursquare150.png"></a>' +
                                   '</div>');
         } else {
@@ -291,6 +293,7 @@ function initMap() {
             // Create an onclick event to open an infowindow per marker.
             marker.addListener('click', function() {
                 populateInfoWindow(this, largeInfowindow); // 'this' is the marker object
+                this.setIcon('http://maps.google.com/mapfiles/ms/micons/purple-dot.png')
             });
         });
         // make sure markers are visible in window, lower zoom value if needed
