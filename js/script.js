@@ -192,8 +192,7 @@ function initMap() {
 
     // This function populates the infowindow when the marker is clicked
     function populateInfoWindow(marker, infowindow) {
-        // infowindow.marker = marker;
-        // marker.setIcon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+        // infowindow.marker = marker; // what does this do? do I need it?
         if (marker.fsAddress) {
             address = '';
             // The formattedAddress returned from the API request is an array,
@@ -305,9 +304,11 @@ function initMap() {
         };
 
         // this function is called when the listItem is clicked in the view
-        // passes the appropriate marker as argument
+        // this works via knockout binding on the list item HTML element
+        // passes the corresponging marker as argument to populateInfoWindow
         this.itemClicked = function (clickedListItem) {
             populateInfoWindow(clickedListItem.marker, largeInfowindow);
+            clickedListItem.marker.setIcon('http://maps.google.com/mapfiles/ms/micons/purple-dot.png');
         }
 
         // Create an observable array and pass it the 'filters' global array
