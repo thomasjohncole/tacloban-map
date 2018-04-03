@@ -1,7 +1,7 @@
 /* Some of these code ideas were borrowed from Udacity Maps API classes
 and the Udacity KnockoutJS classes */
 
-// Model: this is the data used to create markers, list items, and dropdown menu
+// Model: this is the data used to create the markers and list items
 var locations = [
         {
             name: 'Serenitea',
@@ -60,13 +60,6 @@ locations.sort(function(a, b) {
     return 1;
   }
 });
-
-// Create global map variable - Why do I need this?????
-// Commenting it out until something goes wrong, as I see nothing
-// In the global execution context that requires this to be defined
-// Outside of initMap - Maybe I need this if the map doesn't load?
-// var map;
-// var marker;
 
 function initMap() {
     /* Create an object which contains the map options: center, zoom, and styles.
@@ -220,12 +213,6 @@ function initMap() {
         }
 
         infowindow.open(map, marker);
-        console.log("infowindow is open");
-        // Make sure the marker property is cleared if the infowindow is closed.
-        // infowindow.addListener('closeclick',function(){
-        //     // infowindow.setMarker = null;
-        //     console.log("infowindow is closed!");
-        // });
     }
 
     // this is the Knockout viewModel.
@@ -234,8 +221,7 @@ function initMap() {
 
         // Constructor function creates an object of type Location when called
         // with the 'new' keyword - this will be used to populate the locationList
-        // Do we need to pass the map argument?
-        var Location = function (data, map) {
+        var Location = function (data) {
             this.name = data.name;
             this.position = data.position;
             this.type = data.type;
@@ -255,7 +241,6 @@ function initMap() {
         // Build a Foursquare API URL using the venue ID for each Location object
         // Note: Code in this function will run AFTER everything else
         // executes because $.getJSON is asynchronous
-
         this.locationList().forEach(function (listItem) {
             var fsFullURL = fsInitialURL +
                         listItem.venueID +
@@ -284,7 +269,8 @@ function initMap() {
 
             // Assign the newly created marker object to the marker property of
             // the corresponding 'Location' object - This is what allows the filter
-            // function work on BOTH the list and the markers simultaneously
+            // function work on BOTH the list and the markers simultaneously, and
+            // for the filter to act on both list and marker as well
             listItem.marker = marker;
             // extends the map bounds as per marker positions
             bounds.extend(marker.position);
@@ -308,6 +294,7 @@ function initMap() {
         // passes the corresponging marker as argument to populateInfoWindow
         this.itemClicked = function (clickedListItem) {
             populateInfoWindow(clickedListItem.marker, largeInfowindow);
+            // turns the marker purple when it's clicked
             clickedListItem.marker.setIcon('http://maps.google.com/mapfiles/ms/micons/purple-dot.png');
         }
 
@@ -315,7 +302,6 @@ function initMap() {
         this.filters = ko.observableArray(filters);
         // Set the initial filter to blank.
         this.filter = ko.observable('');
-
         // Create a computed observable which filters locations based on type.
         this.filteredLocations = ko.computed(function() {
             var filter = self.filter();
@@ -348,7 +334,7 @@ function initMap() {
     ko.applyBindings(new viewModel());
 
 }
-
+// this function will execute if the google maps API won't load
 function googleMapsAPIError() {
     alert("Google Maps API did not load!\nTry a refresh?\n" +
           "Turn it off and on again?\nAre you behind a firewall?\n" +
