@@ -8,16 +8,5 @@ html, body {
     height: 100%;
 }
 .navbar {
-    opacity: 0.75;
+    opacity: 0.8;
 }
-/*#list {
-    float:left;
-    position: fixed;
-    z-index: 99 !important;
-    background-color: white;
-    padding-right: 25px;
-    padding-left: 25px;
-}
-ul {
-    list-style-type: none;
-}*/
