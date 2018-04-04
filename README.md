@@ -5,7 +5,7 @@
 
 The Tacloban City Map 2018 is a web application which displays a map of my favorite coffee and tea venues in Tacloban City, on the island of Leyte in the Philippines. 
 
-The map, which is loaded via an asychronous request to the [Google Maps API] (https://developers.google.com/maps/), displays markers of the venue locations, and a navigation list displays the names of the corresponding venues as well. One can click on either the map markers, or the list items to pop up an information window which will display name and address information for the venue. 
+The map, which is loaded via an asychronous request to the [Google Maps API](https://developers.google.com/maps/), displays markers of the venue locations, and a navigation list displays the names of the corresponding venues as well. One can click on either the map markers, or the list items to pop up an information window which will display name and address information for the venue. 
 
 The information windows contain data obtained from the [Foursquare API](https://developer.foursquare.com/) via AJAX requests. A link is also provided which when clicked will open the corresponding Foursquare venue page.
 
