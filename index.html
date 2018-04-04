@@ -17,7 +17,7 @@
 
 
             <ul class="navbar-nav" data-bind="foreach: filteredLocations" >
-                <li class="nav-item" data-bind="text: name, $root.itemClicked">
+                <li class="nav-item" data-bind="text: name, click: $parent.itemClicked">
                 </li>
             </ul>
 

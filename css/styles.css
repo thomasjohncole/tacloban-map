@@ -7,7 +7,7 @@ html, body {
 #map {
     height: 100%;
 }
-#list {
+/*#list {
     float:left;
     position: fixed;
     z-index: 99 !important;
@@ -17,5 +17,4 @@ html, body {
 }
 ul {
     list-style-type: none;
-}
-
+}*/
