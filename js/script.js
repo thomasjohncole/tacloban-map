@@ -61,6 +61,8 @@ locations.sort(function(a, b) {
   }
 });
 
+let map;
+
 function initMap() {
     /* Create an object which contains the map options: center, zoom, and styles.
     Map styles are "klapsons purple" by Vanlop Ninkhuha taken from snazzymaps.com */
@@ -187,7 +189,7 @@ function initMap() {
     function populateInfoWindow(marker, infowindow) {
         // infowindow.marker = marker; // what does this do? do I need it?
         if (marker.fsAddress) {
-            address = "";
+            let address = "";
             // The formattedAddress returned from the API request is an array,
             // so we can loop through it and add line breaks for display
             marker.fsAddress.forEach(function (line){
