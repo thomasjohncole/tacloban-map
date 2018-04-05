@@ -341,4 +341,3 @@ function googleMapsAPIError() {
           "Turn it off and on again?\nAre you behind a firewall?\n" +
           "Are you online?\nMaybe just try again later.");
 }
-
