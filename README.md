@@ -29,3 +29,5 @@ The [Popper.js](https://popper.js.org/) library is utilized as a dependency to B
 1. Clone the repository: `git-clone https://github.com/colecode-ph/tacloban-map.git`
 
 2. Open the index.html file in Chrome.
+
+3. This project is also hosted on GitHub pages. Just click here: [Tacloban Map 2018](https://colecode-ph.github.io/tacloban-map/)
