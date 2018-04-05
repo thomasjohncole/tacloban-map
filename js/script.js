@@ -297,7 +297,7 @@ function initMap() {
         this.itemClicked = function (clickedListItem) {
             populateInfoWindow(clickedListItem.marker, largeInfowindow);
             // turns the marker purple when it"s clicked
-            clickedListItem.marker.setIcon("http://maps.google.com/mapfiles/ms/micons/purple-dot.png");
+            clickedListItem.marker.setIcon("https://maps.google.com/mapfiles/ms/micons/purple-dot.png");
         };
 
         // Create an observable array and pass it the "filters" global array
