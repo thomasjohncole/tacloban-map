@@ -280,7 +280,7 @@ function initMap() {
             // Create an onclick event to open an infowindow per marker.
             marker.addListener("click", function() {
                 populateInfoWindow(this, largeInfowindow); // "this" is the marker object
-                this.setIcon("http://maps.google.com/mapfiles/ms/micons/purple-dot.png");
+                this.setIcon("https://maps.google.com/mapfiles/ms/micons/purple-dot.png");
             });
         });
         // make sure markers are visible in window, lower zoom value if needed
