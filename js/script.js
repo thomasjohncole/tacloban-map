@@ -10,13 +10,13 @@ const locations = [
             venueID: '57ac5646498ea62681e9636d'
         },
         {
-            name: 'Skye Lounge',
+            name: 'Skye coffee+wine',
             position: {lat: 11.237465, lng: 125.002999},
             type: 'Real Street',
             venueID: '5777e920498ecedd942ed04d'
         },
         {
-            name: 'Jose Karlos Cafe',
+            name: 'Jose Karlos Coffee Shop',
             position: {lat: 11.241782, lng: 125.005242},
             type: 'Downtown',
             venueID: '5823d7c4d1efa6541ad2ae30'
