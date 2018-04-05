@@ -278,7 +278,7 @@ function initMap() {
             // Create an onclick event to open an infowindow per marker.
             marker.addListener("click", function() {
                 populateInfoWindow(this, largeInfowindow); // "this" is the marker object
-                this.setIcon("http://maps.google.com/mapfiles/ms/micons/purple-dot.png")
+                this.setIcon("http://maps.google.com/mapfiles/ms/micons/purple-dot.png");
             });
         });
         // make sure markers are visible in window, lower zoom value if needed
@@ -296,7 +296,7 @@ function initMap() {
             populateInfoWindow(clickedListItem.marker, largeInfowindow);
             // turns the marker purple when it"s clicked
             clickedListItem.marker.setIcon("http://maps.google.com/mapfiles/ms/micons/purple-dot.png");
-        }
+        };
 
         // Create an observable array and pass it the "filters" global array
         this.filters = ko.observableArray(filters);
@@ -329,7 +329,7 @@ function initMap() {
             }
         });
 
-    }
+    };
 
     ko.applyBindings(new viewModel());
 
