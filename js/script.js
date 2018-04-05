@@ -48,10 +48,10 @@ const fsClientID = "&client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ"
 const fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT";
 
 
-// filters to use for dropdown menu
+// Filters to use for dropdown menu
 const filters = ["All", "Downtown", "Real Street", "Uptown"];
 
-// sort the locations alpha by name
+// Sort the locations alpha by name
 locations.sort(function(a, b) {
   if (a.name < b.name) {
     return -1;
@@ -190,8 +190,8 @@ function initMap() {
         // infowindow.marker = marker; // what does this do? do I need it?
         if (marker.fsAddress) {
             let address = "";
-            // The formattedAddress returned from the API request is an array,
-            // so we can loop through it and add line breaks for display
+            /* The formattedAddress returned from the API request is an array,
+            so we can loop through it and add line breaks for display */
             marker.fsAddress.forEach(function (line){
                 address += line + "</br>";
             });
@@ -217,32 +217,32 @@ function initMap() {
         infowindow.open(map, marker);
     }
 
-    // this is the Knockout viewModel.
+    // This is the Knockout viewModel.
     let viewModel = function () {
         let self = this;
 
-        // Constructor function creates an object of type Location when called
-        // with the "new" keyword - this will be used to populate the locationList
+        /* Constructor function creates an object of type Location when called
+        with the "new" keyword - this will be used to populate the locationList */
         let Location = function (data) {
             this.name = data.name;
             this.position = data.position;
             this.type = data.type;
             this.venueID = data.venueID; // Foursquare venue ID
-            this.marker = ""; // gets assigned later when markers are created
+            this.marker = ""; // Gets assigned later when markers are created
         };
 
         this.locationList = ko.observableArray([]);
 
         /* Iterate through locations array. For each item/object in the array,
         create a new instance of the Location object and push it to the
-        locationList observable array. */
+        locationList observable array */
         locations.forEach(function (listItem) {
             self.locationList.push( new Location(listItem) );
         });
 
-        // Build a Foursquare API URL using the venue ID for each Location object
-        // Note: Code in this function will run AFTER everything else
-        // executes because $.getJSON is asynchronous
+        /* Build a Foursquare API URL using the venue ID for each Location object
+        Note: Code in this function will run AFTER everything else executes because
+        $.getJSON is asynchronous */
         this.locationList().forEach(function (listItem) {
             let fsFullURL = fsInitialURL +
                         listItem.venueID +
@@ -256,8 +256,8 @@ function initMap() {
             });
         });
 
-        // Use the locationList observableArray to create map markers
-        // Create a marker for each Location object in the array
+        /* Use the locationList observableArray to create map markers;
+        Create a marker for each Location object in the array */
         this.locationList().forEach(function (listItem) {
             let marker = new google.maps.Marker({
                 map: map, // specifies the map on which to place the marker
@@ -269,21 +269,20 @@ function initMap() {
                 animation: google.maps.Animation.DROP,
             });
 
-            // Assign the newly created marker object to the marker property of
-            // the corresponding "Location" object - This is what allows the filter
-            // function work on BOTH the list and the markers simultaneously, and
-            // for the filter to act on both list and marker as well
+            /* Assign the newly created marker object to the marker property of
+            the corresponding "Location" object - This is what allows the filter
+            function work on BOTH the list and the markers simultaneously */
             listItem.marker = marker;
-            // extends the map bounds as per marker positions
+            // Extends the map bounds as per marker positions
             bounds.extend(marker.position);
 
-            // Create an onclick event to open an infowindow per marker.
+            // Create an onclick event to open an infowindow per marker
             marker.addListener("click", function() {
                 populateInfoWindow(this, largeInfowindow); // "this" is the marker object
                 this.setIcon("https://maps.google.com/mapfiles/ms/micons/purple-dot.png");
             });
         });
-        // make sure markers are visible in window, lower zoom value if needed
+        // Make sure markers are visible in window, lower zoom value if needed
         map.fitBounds(bounds);
 
         // Recenter map on window resize to accomodate markers
@@ -291,9 +290,9 @@ function initMap() {
             map.fitBounds(bounds);
         };
 
-        // this function is called when the listItem is clicked in the view
-        // this works via knockout binding on the list item HTML element
-        // passes the corresponging marker as argument to populateInfoWindow
+        /* This function is called when the listItem is clicked in the view,
+        // this works via knockout binding on the list item HTML element and
+        // passes the corresponging marker as argument to populateInfoWindow */
         this.itemClicked = function (clickedListItem) {
             populateInfoWindow(clickedListItem.marker, largeInfowindow);
             // turns the marker purple when it"s clicked
@@ -302,7 +301,7 @@ function initMap() {
 
         // Create an observable array and pass it the "filters" global array
         this.filters = ko.observableArray(filters);
-        // Set the initial filter to blank.
+        // Set the initial filter to blank
         this.filter = ko.observable("");
         // Create a computed observable which filters locations based on type.
         this.filteredLocations = ko.computed(function() {
@@ -318,12 +317,12 @@ function initMap() {
                 });
             } else {
                 return ko.utils.arrayFilter( self.locationList(), function(arrayItem) {
-                    // set visibility to true first, since the marker may be
-                    // invisible from a previous else loop execution
+                    /* Set visibility to true first, since the marker may be
+                    invisible from a previous "else" loop execution */
                     arrayItem.marker.setVisible(true);
                     if (arrayItem.type != filter) {
                         arrayItem.marker.setVisible(false);
-                        // close any open infowindows when filter is applied
+                        // Close any open infowindows when filter is applied
                         largeInfowindow.close(largeInfowindow);
                     }
                     return arrayItem.type == filter;
@@ -336,7 +335,7 @@ function initMap() {
     ko.applyBindings(new viewModel());
 
 }
-// this function will execute if the google maps API won't load
+// This function will execute if the google maps API won't load
 function googleMapsAPIError() {
     alert("Google Maps API did not load!\nTry a refresh?\n" +
           "Turn it off and on again?\nAre you behind a firewall?\n" +
