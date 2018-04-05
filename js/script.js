@@ -2,7 +2,7 @@
 and the Udacity KnockoutJS classes */
 
 // Model: this is the data used to create the markers and list items
-var locations = [
+const locations = [
         {
             name: 'Serenitea',
             position: {lat: 11.221357, lng: 125.003836},
@@ -42,14 +42,14 @@ var locations = [
     ];
 
 // Define variables to construct the URL for the Foursquare API request
-var fsInitialURL = "https://api.foursquare.com/v2/venues/";
-var fsVersion = "?v=20180323";
-var fsClientID = "&client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ";
-var fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT";
+const fsInitialURL = "https://api.foursquare.com/v2/venues/";
+const fsVersion = "?v=20180323";
+const fsClientID = "&client_id=OH0WUYIEE0T2YES1ZRS3TPTZOCFEEIKSUHZR3HH2HMSKLRQQ";
+const fsClientSecret = "&client_secret=PIGR2CGDNIJZXV4MXGUHLJ1TMZCJ3NBYFXKLZBFCGPGUH1YT";
 
 
 // filters to use for dropdown menu
-var filters = ['All', 'Downtown', 'Real Street', 'Uptown'];
+const filters = ['All', 'Downtown', 'Real Street', 'Uptown'];
 
 // sort the locations alpha by name
 locations.sort(function(a, b) {
@@ -64,7 +64,7 @@ locations.sort(function(a, b) {
 function initMap() {
     /* Create an object which contains the map options: center, zoom, and styles.
     Map styles are 'klapsons purple' by Vanlop Ninkhuha taken from snazzymaps.com */
-    var mapOptions = {
+    const mapOptions = {
         center: {lat: 11.223399, lng: 125.001354},
         zoom: 14,
         styles: [
@@ -180,8 +180,8 @@ function initMap() {
     mapOptions object as arguments */
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    var largeInfowindow = new google.maps.InfoWindow();
-    var bounds = new google.maps.LatLngBounds();
+    let largeInfowindow = new google.maps.InfoWindow();
+    let bounds = new google.maps.LatLngBounds();
 
     // This function populates the infowindow when the marker is clicked
     function populateInfoWindow(marker, infowindow) {
@@ -216,12 +216,12 @@ function initMap() {
     }
 
     // this is the Knockout viewModel.
-    var viewModel = function () {
-        var self = this;
+    let viewModel = function () {
+        let self = this;
 
         // Constructor function creates an object of type Location when called
         // with the 'new' keyword - this will be used to populate the locationList
-        var Location = function (data) {
+        let Location = function (data) {
             this.name = data.name;
             this.position = data.position;
             this.type = data.type;
@@ -242,7 +242,7 @@ function initMap() {
         // Note: Code in this function will run AFTER everything else
         // executes because $.getJSON is asynchronous
         this.locationList().forEach(function (listItem) {
-            var fsFullURL = fsInitialURL +
+            let fsFullURL = fsInitialURL +
                         listItem.venueID +
                         fsVersion +
                         fsClientID +
@@ -257,7 +257,7 @@ function initMap() {
         // Use the locationList observableArray to create map markers
         // Create a marker for each Location object in the array
         this.locationList().forEach(function (listItem) {
-            var marker = new google.maps.Marker({
+            let marker = new google.maps.Marker({
                 map: map, // specifies the map on which to place the marker
                 position: listItem.position, // the only required value
                 name: listItem.name,
@@ -304,7 +304,7 @@ function initMap() {
         this.filter = ko.observable('');
         // Create a computed observable which filters locations based on type.
         this.filteredLocations = ko.computed(function() {
-            var filter = self.filter();
+            let filter = self.filter();
             /* If filter is false OR is set to 'All' then return all of the
             locations, otherwise return only the locations which have a 'type' value
             which matches the filter value. */
