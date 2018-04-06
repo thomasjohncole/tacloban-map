@@ -200,10 +200,10 @@ function initMap() {
                                   "<strong>" + marker.fsName + "</strong>" +
                                   "</br>" + address +
                                   "</br>(Address provided by Foursquare)" +
-                                  "</br><a href='http://foursquare.com/v/'" +
+                                  "</br><a href='http://foursquare.com/v/" +
                                   marker.fsVenueID +
-                                  " target='_blank'" +
-                                  "><img src='img/foursquare150.png'></a>" +
+                                  "'target='_blank'>" +
+                                  "<img src='img/foursquare150.png'></a>" +
                                   "</div>");
         } else {
             // Error fallback in case $.getJSON function response is empty
