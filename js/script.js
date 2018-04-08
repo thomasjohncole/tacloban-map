@@ -2,6 +2,7 @@
 and the Udacity KnockoutJS classes */
 
 // Model: this is the data used to create the markers and list items
+// TODO: put this in a separate file and use export/import syntax
 const locations = [
         {
             name: "Serenitea",
@@ -187,7 +188,6 @@ function initMap() {
 
     // This function populates the infowindow when the marker is clicked
     function populateInfoWindow(marker, infowindow) {
-        // infowindow.marker = marker; // what does this do? do I need it?
         if (marker.fsAddress) {
             let address = "";
             /* The formattedAddress returned from the API request is an array,
@@ -223,6 +223,7 @@ function initMap() {
 
         /* Constructor function creates an object of type Location when called
         with the "new" keyword - this will be used to populate the locationList */
+        // TODO - convert this to 'class = Location' syntax
         let Location = function (data) {
             this.name = data.name;
             this.position = data.position;
