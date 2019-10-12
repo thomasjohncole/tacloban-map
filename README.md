@@ -1,8 +1,6 @@
 # Tacloban City Map 2018
 
 
-## Project 5 in the Full Stack Web Developer Nanodegree
-
 The Tacloban City Map 2018 is a web application which displays a map of my favorite coffee and tea venues in Tacloban City, on the island of Leyte in the Philippines. 
 
 The map, which is loaded via an asychronous request to the [Google Maps API](https://developers.google.com/maps/), displays markers of the venue locations, and a navigation list displays the names of the corresponding venues as well. One can click on either the map markers, or the list items to pop up an information window which will display name and address information for the venue. 
@@ -30,4 +28,4 @@ The [Popper.js](https://popper.js.org/) library is utilized as a dependency to B
 
 2. Open the index.html file in Chrome.
 
-3. This project is also hosted on GitHub pages. Just click here: [Tacloban Map 2018](https://colecode-ph.github.io/tacloban-map/)
+3. This project is also hosted on GitHub pages. Just click here: [Tacloban Map 2018](https://thomasjohncole.github.io/tacloban-map/)
